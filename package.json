@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-sso-github",
-  "version": "0.1.3",
+  "version": "0.3.1",
   "description": "NodeBB GitHub SSO",
   "main": "library.js",
   "repository": {
@@ -23,9 +23,37 @@
   "bugs": {
     "url": "https://github.com/psychobunny/nodebb-plugin-sso-github/issues"
   },
-  "readme": "",
-  "readmeFilename": "README.md",
   "dependencies": {
-    "passport-github": "~0.1.5"
-  }
+    "passport-github2": "~0.1.9"
+  },
+  "nbbpm": {
+    "compatibility": "^0.6.0"
+  },
+  "gitHead": "87c7a9bf78eb567d91d2ebca97189a30ab703e5d",
+  "homepage": "https://github.com/psychobunny/nodebb-plugin-sso-github",
+  "_id": "nodebb-plugin-sso-github@0.3.1",
+  "scripts": {},
+  "_shasum": "e127d0d88742fb887baa7e0416d620e8338ffe67",
+  "_from": "nodebb-plugin-sso-github@0.3.1",
+  "_npmVersion": "2.0.0",
+  "_npmUser": {
+    "name": "julianlam",
+    "email": "julian@designcreateplay.com"
+  },
+  "maintainers": [
+    {
+      "name": "psychobunny",
+      "email": "psycho.bunny@hotmail.com"
+    },
+    {
+      "name": "julianlam",
+      "email": "julian@designcreateplay.com"
+    }
+  ],
+  "dist": {
+    "shasum": "e127d0d88742fb887baa7e0416d620e8338ffe67",
+    "tarball": "http://registry.npmjs.org/nodebb-plugin-sso-github/-/nodebb-plugin-sso-github-0.3.1.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/nodebb-plugin-sso-github/-/nodebb-plugin-sso-github-0.3.1.tgz"
 }

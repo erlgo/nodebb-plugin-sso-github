@@ -12,7 +12,10 @@
 			"hook": "filter:admin.header.build", "method": "addMenuItem"
 		},
 		{
-			"hook": "action:app.load", "method": "init"
+			"hook": "static:app.load", "method": "init"
+		},
+		{
+			"hook": "filter:user.delete", "method" : "userDelete"
 		}
 	],
 	"templates": "./templates"

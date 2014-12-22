@@ -5,9 +5,10 @@
 		db = module.parent.require('../src/database'),
 		meta = module.parent.require('./meta'),
 		passport = module.parent.require('passport'),
-		passportGithub = require('passport-github').Strategy,
+		passportGithub = require('passport-github2').Strategy,
 		fs = module.parent.require('fs'),
-		path = module.parent.require('path');
+		path = module.parent.require('path'),
+		winston = module.parent.require('winston');
 
 	var constants = Object.freeze({
 		'name': "GitHub",
@@ -20,10 +21,10 @@
 	var GitHub = {};
 
 	GitHub.getStrategy = function(strategies, callback) {
-		if (meta.config['social:github:id'] && meta.config['social:github:secret']) {
+		if (GitHub.hasOwnProperty('id') && GitHub.hasOwnProperty('secret')) {
 			passport.use(new passportGithub({
-				clientID: meta.config['social:github:id'],
-				clientSecret: meta.config['social:github:secret'],
+				clientID: GitHub.id,
+				clientSecret: GitHub.secret,
 				callbackURL: module.parent.require('nconf').get('url') + '/auth/github/callback'
 			}, function(token, tokenSecret, profile, done) {
 				GitHub.login(profile.id, profile.username, profile.emails[0].value, function(err, user) {
@@ -38,11 +39,11 @@
 				name: 'github',
 				url: '/auth/github',
 				callbackURL: '/auth/github/callback',
-				icon: 'github',
+				icon: 'fa-github',
 				scope: 'user:email'
 			});
 		}
-		
+
 		callback(null, strategies);
 	};
 
@@ -50,7 +51,7 @@
 		if (!email) {
 			email = username + '@users.noreply.github.com';
 		}
-		
+
 		GitHub.getUidByGitHubID(githubID, function(err, uid) {
 			if (err) {
 				return callback(err);
@@ -65,7 +66,8 @@
 				// New User
 				var success = function(uid) {
 					User.setUserField(uid, 'githubid', githubID);
-					db.setObjectField('githubid:uid', githubID, uid);
+					db.setObjectField('sso:github:id', githubID, uid);
+					db.setObjectField('sso:github:uid', uid, githubID);
 					callback(null, {
 						uid: uid
 					});
@@ -89,7 +91,7 @@
 	};
 
 	GitHub.getUidByGitHubID = function(githubID, callback) {
-		db.getObjectField('githubid:uid', githubID, function(err, uid) {
+		db.getObjectField('sso:github:id', githubID, function(err, uid) {
 			if (err) {
 				callback(err);
 			} else {
@@ -108,13 +110,36 @@
 		callback(null, custom_header);
 	};
 
+	GitHub.userDelete = function(uid,callback){
+		db.getObjectField('sso:github:uid', uid, function(err, githubID) {
+			if (err) {
+				callback();
+			} else {
+				db.deleteObjectField('sso:github:id',githubID);
+				db.deleteObjectField('sso:github:uid',uid);
+				callback();
+			}
+		});
+	}
+
 	function renderAdmin(req, res, callback) {
 		res.render('sso/github/admin', {});
 	}
 
-	GitHub.init = function(app, middleware, controllers) {
-		app.get('/admin/github', middleware.admin.buildHeader, renderAdmin);
-		app.get('/api/admin/github', renderAdmin);
+	GitHub.init = function(data, callback) {
+		data.router.get('/admin/github', data.middleware.admin.buildHeader, renderAdmin);
+		data.router.get('/api/admin/github', renderAdmin);
+
+		meta.settings.get('sso-github', function(err, config) {
+			if (config.hasOwnProperty('id') && config.hasOwnProperty('secret')) {
+				GitHub.id = config.id;
+				GitHub.secret = config.secret;
+			} else {
+				winston.warn('[plugins/sso-github] Please complete GitHub SSO setup at: /admin/plugins/sso-github');
+			}
+
+			callback();
+		});
 	};
 
 	module.exports = GitHub;
