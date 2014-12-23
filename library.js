@@ -111,11 +111,11 @@
 	};
 
 	GitHub.userDelete = function(uid,callback){
-		db.getObjectField('sso:github:uid', uid, function(err, githubID) {
+		db.getObjectField('sso:github:uid', uid, function(err, ssoid) {
 			if (err) {
 				callback();
 			} else {
-				db.deleteObjectField('sso:github:id',githubID);
+				db.deleteObjectField('sso:github:id',ssoid);
 				db.deleteObjectField('sso:github:uid',uid);
 				callback();
 			}
