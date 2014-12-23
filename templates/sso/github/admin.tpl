@@ -4,7 +4,7 @@
 			<div class="panel-heading"><i class="fa fa-github"></i> GitHub Social Authentication</div>
 			<div class="panel-body">
 				<p>
-					Register a new <strong>GitHub Application</strong> via 
+					Register a new <strong>GitHub Application</strong> via
 					<a href="https://github.com/settings/applications">Developer Applications</a> and then paste
 					your application details here. Your callback URL is yourdomain.com/auth/github/callback
 				</p>
@@ -17,6 +17,10 @@
 					<div class="form-group">
 						<label for="secret">Client Secret</label>
 						<input type="text" name="secret" title="Client Secret" class="form-control" placeholder="Client Secret">
+					</div>
+					<div class="form-group">
+						<label for="secret">Client Secret</label>
+						<input type="text" name="url" title="WebSite Url" class="form-control" placeholder="WebSite Url eg:http://abc.com">
 					</div>
 				</form>
 			</div>

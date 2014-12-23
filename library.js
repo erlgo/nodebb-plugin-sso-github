@@ -22,10 +22,11 @@
 
 	GitHub.getStrategy = function(strategies, callback) {
 		if (GitHub.hasOwnProperty('id') && GitHub.hasOwnProperty('secret')) {
+			var url = GitHub.hasOwnProperty('url') || meta.config['social:url'] || module.parent.require('nconf').get('url');
 			passport.use(new passportGithub({
 				clientID: GitHub.id,
 				clientSecret: GitHub.secret,
-				callbackURL: module.parent.require('nconf').get('url') + '/auth/github/callback'
+				callbackURL: url + '/auth/github/callback'
 			}, function(token, tokenSecret, profile, done) {
 				GitHub.login(profile.id, profile.username, profile.emails[0].value, function(err, user) {
 					if (err) {
